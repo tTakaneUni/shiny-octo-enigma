@@ -32,7 +32,7 @@ export const getSearchProvider = (
 
   return provideHeadless({
     apiKey,
-    experienceKey: "locator",
+    experienceKey: "test-search",
     locale,
     verticalKey: "locations",
     experienceVersion,
