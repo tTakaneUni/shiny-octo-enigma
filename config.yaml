@@ -21,6 +21,9 @@ siteStream:
     - c_copyrightMessage
     - c_footerLinks
     - c_header
+    - c_nearbySectionAPIKey
+    - c_searchExperienceAPIKey
+    - c_reviewsAPIKey
     - c_brand
     - c_searchPage.slug
   localization:
@@ -29,7 +32,7 @@ siteStream:
     primary: false
   entityId: site-entity
 sitemap:
-  excludeList:
+  exclude_list:
     - feedback/
     - robots.txt
     - google5804978b12580bf0.html
