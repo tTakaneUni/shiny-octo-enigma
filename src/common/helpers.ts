@@ -1,4 +1,8 @@
-import { formatPhoneNumber, isValidPhoneNumber } from "@yext/phonenumber-util";
+import {
+  parsePhoneNumberWithError,
+  CountryCode,
+  ParseError,
+} from "libphonenumber-js";
 
 function dedupeStreamFields(allFields: string[]): string[] {
   return [...new Set(allFields)];
@@ -14,40 +18,24 @@ function formatPhone(
   s: string | undefined,
   countryCode: string
 ): string | undefined {
-  if (s && isValidPhoneNumber(s)) {
-    let phone: string | null;
+  if (s) {
+    try {
+      const phone = parsePhoneNumberWithError(s, countryCode as CountryCode);
 
-    switch (countryCode) {
-      case "US":
-        // (123) 555-6789
-        phone = formatPhoneNumber({
-          e164: s,
-          format: "(xxx) xxx-xxxx",
-        });
-        break;
-      default:
-        // +1 123 555 6789
-        phone = formatPhoneNumber({
-          e164: s,
-          format: "+x xxx xxx xxxx",
-        });
+      if (countryCode === "US") {
+        return phone.formatNational(); // (123) 555-6789
+      } else {
+        return phone.formatInternational(); // +1 123 555 6789
+      }
+    } catch (error) {
+      if (error instanceof ParseError) {
+        // Not a phone number, non-existent country, etc.
+        console.error(error.message);
+      }
     }
-
-    return phone || s;
   }
 
   return s;
 }
 
-const sortDirectoryByAlphabetical = (directoryChildren: any[]) => {
-  const sortFn = (p1: any, p2: any) => {
-    if (p1.name === p2.name) {
-      return 0;
-    }
-    return p1.name < p2.name ? -1 : 1;
-  };
-
-  return directoryChildren.sort(sortFn);
-};
-
-export { dedupeStreamFields, formatPhone, sortDirectoryByAlphabetical };
+export { dedupeStreamFields, formatPhone };

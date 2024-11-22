@@ -9,12 +9,23 @@ export const getMapKey = () => {
     );
   }
 
-  const googleLocalDevKey = { clientKey: "gme-yextinc" };
-  const mapboxLocalDevKey = {
-    apiKey: "pk.eyJ1IjoieWV4dCIsImEiOiJqNzVybUhnIn0.hTOO5A1yqfpN42-_z_GuLw",
-  };
+  const authObj = isLocalDev
+    ? { clientKey: "gme-yextinc" }
+    : { apiKey: MAPS_API_KEY };
 
-  const authObj = isLocalDev ? googleLocalDevKey : { apiKey: MAPS_API_KEY };
+  return authObj;
+};
+
+export const getGoogleMapKey = () => {
+  if (MAPS_API_KEY === "<REPLACE-ME>") {
+    console.error(
+      "Add a map provider API key to config.ts or as a site variable to enable map functionality on staging or prod."
+    );
+  }
+
+  const authObj = isLocalDev
+    ? { googleMapsClientId: "gme-yextinc" }
+    : { googleMapsApiKey: MAPS_API_KEY };
 
   return authObj;
 };

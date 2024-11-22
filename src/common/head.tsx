@@ -94,10 +94,7 @@ export function defaultHeadConfig(
           type: "meta",
           attributes: {
             name: "geo.placename",
-            content: `${data.document.address.city},${
-              data.document.address.localizedRegionName ||
-              data.document.address.region
-            }`,
+            content: `${data.document.address.city},${data.document.address.region}`, // TODO: dono't use abbreviated form here when it's available
           },
         },
         {
@@ -182,12 +179,6 @@ function metaTitle(data: TemplateRenderProps): string {
   const { c_meta: entityMeta } = data.document;
   if (entityMeta?.title) return entityMeta.title;
 
-  // if you want to return some hard coded string for specific page types:
-  // if (data.document.meta.entityType.id == "location") {
-  //   const profile = data.document;
-  //   return `${profile.name} at ${profile.address.line1}`;
-  // }
-
   return "";
 }
 
@@ -197,9 +188,9 @@ function metaDescription(data: TemplateRenderProps): string {
   if (entityMeta?.description) return entityMeta.description;
 
   // 2. Check for breadcrumbs
-  const { dm_directoryParents_defaultdirectory } = data.document;
-  if (dm_directoryParents_defaultdirectory) {
-    return `${dm_directoryParents_defaultdirectory
+  const { dm_directoryParents } = data.document;
+  if (dm_directoryParents) {
+    return `${dm_directoryParents
       .map((crumb: { name: string }) => crumb.name)
       .join(", ")}.`;
   }
