@@ -1,17 +1,25 @@
 import { isProduction } from "@yext/pages/util";
 import { provideHeadless } from "@yext/search-headless-react";
-// import { SandboxEndpoints } from "@yext/search-headless-react"; // Add if using a sandbox account
+import type { ConfigurationProviderContextType } from "@yext/sites-react-components";
+import { SandboxEndpoints } from "@yext/search-headless-react"; // Add if using a sandbox account
 
 declare global {
   const YEXT_PUBLIC_MAPS_API_KEY: string;
-  const YEXT_PUBLIC_SEARCH_EXPERIENCE_API_KEY: string;
-  const YEXT_PUBLIC_NEARBY_SECTION_API_KEY: string;
-  const YEXT_PUBLIC_REVIEWS_API_KEY: string;
-  const YEXT_PUBLIC_ANALYTICS_API_KEY: string;
+  const YEXT_PUBLIC_LIVE_API_KEY: string;
+  const YEXT_PUBLIC_SAVED_FILTER_ID: string;
+  const YEXT_PUBLIC_MAX_LIVE_API_SUGGESTION: string;
+  const YEXT_PUBLIC_LIVE_API_ENTITY_TYPES: string;
+  const YEXT_PUBLIC_DEBOUNCE_TIME: number;
 }
 
+const config: ConfigurationProviderContextType = {
+  components: {},
+};
+
+export default config;
+
 // Key for Maps provider.
-export const MAPS_API_KEY = YEXT_PUBLIC_MAPS_API_KEY || "<REPLACE-ME>";
+export const MAPS_API_KEY = YEXT_PUBLIC_MAPS_API_KEY;
 
 // Path for the search page.
 // Exported here since it's required across multiple pages such as the nearby section and directory search bar.
@@ -32,10 +40,10 @@ export const getSearchProvider = (
 
   return provideHeadless({
     apiKey,
-    experienceKey: "test-search",
+    experienceKey: "locator",
     locale,
     verticalKey: "locations",
     experienceVersion,
-    // endpoints: SandboxEndpoints // Add if using a sandbox account
+    endpoints: SandboxEndpoints, // Add if using a sandbox account
   });
 };
